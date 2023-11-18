@@ -1,0 +1,96 @@
+
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+
+const Download = () => {
+  const [datasets, setDatasets] = useState([]);
+
+  useEffect(() => {
+    const authToken =
+      "9e8d1812210f8e0ce80ceff967f22a34704ecc77e013b703cb061418ef1ac00bb839beb58f46100754b332584e5db41ba742c75b0f2441019590b490be545200e74ec62126e953945d8798b1e5ce59dc44bfb5827bff8043d8082023acf48f036b1ca6800adf27d46dcaa1989f7434b6faebaa6a03e9f75b14a6d0510734d74d";
+
+    axios
+      .get("http://localhost:1337/api/downloads?populate=*", {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      })
+      .then((res) => setDatasets(res.data.data))
+      .catch((error) => console.error("Error fetching datasets:", error));
+  }, []);
+
+  return (
+    <div>
+      <section className="w-full mx-auto">
+        <h2 className="text-xl sm:text-3xl md:text-3xl mt-8 lg:text-3xl xl:text-4xl text-blue-500 pl-8 pr-6 mb-4">
+          Datasets Available
+        </h2>
+
+        <div className="mb-8">
+          <p className="text-gray-700 leading-relaxed text-justify mt-6 pl-8 pr-6">
+            The datasets for which you have not requested download permissions
+            are listed below. Click the download button to generate the download
+            token.
+          </p>
+        </div>
+
+        <section className="text-gray-600 -mt-20 body-font">
+          <div className="container px-5 py-24 mx-auto">
+            <div className="flex flex-wrap -m-4">
+              {datasets.map((dataset) => {
+                const {
+                  id,
+                  attributes: {
+                    title,
+                    description,
+                    External_Link,
+                    image: { data: imageArray },
+                  },
+                } = dataset;
+
+                const imageUrl = `http://localhost:1337${imageArray[0].attributes.url}`;
+
+                return (
+                  <div className="p-4 md:w-1/2 lg:w-1/3" key={id}>
+                    <div className="h-full border-2 border-gray-200 border-opacity-60 rounded-lg overflow-hidden flex flex-col">
+                      <img
+                        className="lg:h-48 md:h-36 w-full object-cover object-center"
+                        src={imageUrl}
+                        alt={title}
+                      />
+                      <div className="p-6 flex-grow">
+                        <div className="mb-4">
+                          <h1 className="title-font text-lg font-medium text-gray-900 mb-2">
+                            {title}
+                          </h1>
+                          <p className="leading-relaxed text-justify mb-3">
+                            {description}
+                          </p>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <p className="text-indigo-500 inline-flex items-center">
+                            <a
+                              href={External_Link}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-indigo-500 hover:underline"
+                            >
+                              Download Now
+                            </a>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      </section>
+    </div>
+  );
+};
+
+export default Download;
