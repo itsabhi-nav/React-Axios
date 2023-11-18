@@ -1,0 +1,55 @@
+"use client";
+import React, { useState } from "react";
+import axios from "axios";
+
+const AxiosPost = () => {
+  const initialFormData = { fname: "", lastname: "" };
+  const [inputData, setInputData] = useState(initialFormData);
+  const [token, setToken] = useState(""); // Replace with your authentication logic to get the token
+
+  const handleData = (e) => {
+    setInputData({ ...inputData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:1337/api/forms/",
+        {
+          data: inputData, // Ensure the correct structure
+        },
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer 9e8d1812210f8e0ce80ceff967f22a34704ecc77e013b703cb061418ef1ac00bb839beb58f46100754b332584e5db41ba742c75b0f2441019590b490be545200e74ec62126e953945d8798b1e5ce59dc44bfb5827bff8043d8082023acf48f036b1ca6800adf27d46dcaa1989f7434b6faebaa6a03e9f75b14a6d0510734d74d`, // Replace "Bearer" with your token type
+          },
+        }
+      );
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <>
+      <label>First name:</label>
+      <input
+        type="text"
+        name="fname"
+        value={inputData.fname}
+        onChange={handleData}
+      />
+      <label>Last name:</label>
+      <input
+        type="text"
+        name="lastname"
+        value={inputData.lastname}
+        onChange={handleData}
+      />
+      <button onClick={handleSubmit}>Submit</button>
+    </>
+  );
+};
+
+export default AxiosPost;
