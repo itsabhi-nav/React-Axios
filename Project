@@ -1,0 +1,80 @@
+"use client"
+import { useState } from "react";
+import Image from "next/image";
+
+const Projects = () => {
+  const [sliderPos, setSliderPos] = useState(50);
+
+  const handleSliderChange = (e) => {
+    const newPosition = e.target.value;
+    setSliderPos(newPosition);
+  };
+
+  return (
+    <div>
+      <div className="min pt-10">
+        <h1 className="text-3xl bg-gray-200 text-center mb-10 sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-blue-500 pt-4 ">
+          Image Notation
+        </h1>
+      </div>
+
+
+      <div className=" flex flex-col -mt-14 bg-gray-200 lg:flex-row p-8 justify-center items-center">
+        <div className="lg:w-1/2 relative w-full h-80 lg:h-60 border-2 border-white">
+          <div className="img absolute top-0 left-0 w-full h-full bg-cover">
+            <Image
+              src="/images/1aaa.png"
+              alt="Before Image"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+          <div
+            className="img absolute top-0 left-0 w-full lg:w-1/2 h-full bg-cover"
+            style={{ width: `${sliderPos}%` }}
+          >
+            <Image
+              src="/images/1bbb.png"
+              alt="After Image"
+              layout="fill"
+              objectFit="cover"
+            />
+          </div>
+          <input
+            type="range"
+            min="1"
+            max="100"
+            value={sliderPos}
+            onChange={handleSliderChange}
+            className="slider absolute w-full h-full bg-opacity-30 focus:outline-none transition-all duration-200 hover:bg-opacity-10"
+          />
+          <div
+            className="slider-button absolute w-0 h-0 rounded-full bg-white"
+            style={{ left: `calc(${sliderPos}% - 1rem)`, border: "none", }}
+          >
+            <div className="inline-block w-1 h-1 border-solid border-2 border-gray-600 transform -rotate-45"></div>
+            <div className="inline-block w-1 h-1 border-solid border-2 border-gray-600 transform rotate-135"></div>
+          </div>
+        </div>
+        <div className="lg:w-1/2 w-full m-6">
+          <h2 className="text-2xl font-bold mb-1 leading-relaxed text-justify pl-2 pr-4">
+            Annotations
+          </h2>
+          <p className=" text-gray-700 leading-relaxed text-justify pl-2 pr-2">
+            Autonomous vehicles rely heavily on image recognition and perception
+            to navigate and make decisions on the road. One of the key
+            components of this technology is image annotation, which is the
+            process of labeling and tagging images to provide context and
+            meaning. Image annotation is critical for the development and
+            training of autonomous vehicles, as it allows the vehicle to
+            understand and interpret the environment around it.
+          </p>
+        </div>
+      </div>
+     
+    </div>
+  );
+};
+
+export default Projects;
+
